@@ -3,7 +3,7 @@
 
 __author__ = 'liuzhijun'
 import re
-import urllib2
+import urllib
 import gzip
 
 try:
@@ -54,19 +54,22 @@ def html_escape(text):
 
 def get_html(url):
     assert url_validate(url), "invalid url"
-    request = urllib2.Request(url)
+    request = urllib.request.Request(url)
+
     request.add_header("Accept-encoding", 'gzip')
     request.add_header("User-Agent", 'Mozilla/5.0 (Windows NT 6.2; WOW64) '
                                      'AppleWebKit/537.36 '
                                      '(KHTML, like Gecko) Chrome/34.0.1847.131')
-    response = urllib2.urlopen(request)
+    response = urllib.request.urlopen(request)
     html = response.read()
 
     def encode(html):
         try:
-            html = unicode(html, 'utf-8').encode('utf-8')
+            #html = unicode(html, 'utf-8').encode('utf-8')
+            html = str(html, 'utf-8').encode('utf-8')
         except UnicodeDecodeError:
-            html = unicode(html, 'gbk').encode('utf-8')
+            #html = unicode(html, 'gbk').encode('utf-8')
+            html = str(html, 'gbk').encode('utf-8')
         return html
 
     if response.info().get("Content-Encoding") == 'gzip':

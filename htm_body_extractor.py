@@ -4,9 +4,10 @@
 __author__ = 'liuzhijun'
 import re
 import os
-from urlparse import urlparse
-import extract_utils
-
+#from urlparse3 import urlparse3
+import html_extractor.extract_utils as extract_utils
+from functools import reduce
+from urllib.parse import urlparse
 
 class BodyExtractor(object):
     """
@@ -130,9 +131,11 @@ def clean_html(html):
         r'(?:<!--[\S\s]*?-->)|'  #comment
         r'(?:<script[\S\s]*?>[\S\s]*?</script>)|'  # js...
         r'(?:<style[\S\s]*?>[\S\s]*?</style>)', re.IGNORECASE)  # css
-
-    html_text = regex.sub('', html)  #保留html标签
+    str1 = ''
+    html_text = regex.sub('', html.decode('utf-8'))  #保留html标签
+    print(html_text)
     plain_text = re.sub(r"(?:</?[\s\S]*?>)", '', html_text)  #不包含任何标签的纯html文本
+    #plain_text = re.sub(r"(?:<?[\s\S]*?>)", '', plain_text)
     html_text = extract_utils.html_escape(html_text)
     plain_text = extract_utils.html_escape(plain_text)
     return plain_text, html_text
@@ -171,7 +174,7 @@ if __name__ == "__main__":
     url = 'http://ballpo.com/detail/182560.html'
     te = BodyExtractor(url)
     te.execute()
-    print te.body
+    print(te.body)
     # print te.img
     # print te.title
 
