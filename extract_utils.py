@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'liuzhijun'
+__author__ = 'supercoderX'
 import re
 import urllib
 import gzip

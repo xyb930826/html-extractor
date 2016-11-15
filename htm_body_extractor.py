@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'liuzhijun'
+__author__ = 'supercoderX'
 import re
 import os
 #from urlparse3 import urlparse3
-import html_extractor.extract_utils as extract_utils
+import extract_utils as extract_utils
 from functools import reduce
 from urllib.parse import urlparse
+from bs4 import BeautifulSoup
 
 class BodyExtractor(object):
     """
@@ -30,6 +31,7 @@ class BodyExtractor(object):
         self._pre_process()
         self._extract()
         self._post_process()
+        self.body = BeautifulSoup(self.body, 'html5lib').get_text()
 
     def _pre_process(self):
         html = extract_utils.get_html(self.url)
@@ -131,52 +133,21 @@ def clean_html(html):
         r'(?:<!--[\S\s]*?-->)|'  #comment
         r'(?:<script[\S\s]*?>[\S\s]*?</script>)|'  # js...
         r'(?:<style[\S\s]*?>[\S\s]*?</style>)', re.IGNORECASE)  # css
-    str1 = ''
     html_text = regex.sub('', html.decode('utf-8'))  #保留html标签
-    print(html_text)
     plain_text = re.sub(r"(?:</?[\s\S]*?>)", '', html_text)  #不包含任何标签的纯html文本
-    #plain_text = re.sub(r"(?:<?[\s\S]*?>)", '', plain_text)
     html_text = extract_utils.html_escape(html_text)
-    plain_text = extract_utils.html_escape(plain_text)
+    soup = BeautifulSoup(html_text, 'html5lib')
+    plain_text = soup.get_text()
+
     return plain_text, html_text
 
 
 if __name__ == "__main__":
-    # url = "http://sports.sina.com.cn/j/2014-05-09/00227155725.shtml"
-    # url = "http://sports.qq.com/a/20140509/011085.htm"
-    # url ='http://sports.sina.com.cn/j/2014-05-09/23267157241.shtml?from=hao123_sports_nq'
-    # url = 'http://sports.ifeng.com/gnzq/zc/hengda/detail_2014_05/10/36245019_0.shtml'
-    url = 'http://sports.sohu.com/20140509/n399370219.shtml'
-    # url = 'http://sports.sina.com.cn/nba/2014-05-07/09207153447.shtml'
-    # url = 'http://foofish.net/blog/73/stringio'
-    # url = 'http://www.importnew.com/11309.html'
-    # url = 'http://gd.qq.com/a/20140511/003265.htm?qq=0&ADUIN=253421576&ADSESSION=1399776075&ADTAG=CLIENT.QQ.5323_.0&ADPUBNO=26323'
-    # url = 'http://gd.qq.com/a/20140511/009231.htm'
-    url = 'http://sports.qq.com/a/20140510/018805.htm'
-    # url = 'http://www.qwolf.com/?p=791'
-    url = 'http://www.cnblogs.com/huxi/archive/2010/07/04/1771073.html'
-    url = 'http://cn.uefa.com/memberassociations/news/newsid=2104522.html'
-    url = 'http://cn.uefa.com/memberassociations/association=esp/news/newsid=2104513.html'
-    # url = 'http://ballpo.com/detail/182560.html'  #OK
-    url = 'http://news.arsenal.com.cn/html/a/3QEGT/'  #比较ok
-    # url = 'http://www.barca.cn/portal.php?mod=view&aid=1175'  #ok
-    # url = 'http://www.usportnews.com/goal/pl/60288.html' #ok
-    # url = 'http://spurscn.com/forum.php?mod=viewthread&tid=3307'  #ok
-    # url = 'http://www.mureds.com/thread-77077-1-1.html'  #ok
-    # url = 'http://www.lfc.org.cn/Article/201309/20130905203950546.html'  #ok
-    url = 'http://www.espnstar.com.cn/pub/international/2014/0422/323408.htm' #ok
-    # url = 'http://www.bvbfans.net/forum.php?mod=viewthread&tid=10403&extra=page%3D1'  #ok
-    url = 'http://blog.sina.com.cn/s/blog_4e8581890102ep9u.html'
-    # url = 'http://news.sina.com.cn/c/2014-05-13/110530125372.shtml'  #no
-    url = 'http://www.oschina.net/news/51692/ubuntukylin-is-not-a-china-linux-system' #ok
-    url = 'http://joy2everyone.iteye.com/blog/930342'
-    url = 'http://gd.qq.com/a/20140511/009231.htm'
-    url = 'http://ballpo.com/detail/182560.html'
+
+    url = 'http://md.tech-ex.com/ired/2016/47848.html'
     te = BodyExtractor(url)
     te.execute()
     print(te.body)
-    # print te.img
-    # print te.title
 
 
 
