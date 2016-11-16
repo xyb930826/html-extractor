@@ -145,6 +145,7 @@ def clean_html(html):
 if __name__ == "__main__":
 
     url = 'http://md.tech-ex.com/ired/2016/47848.html'
+    url = 'http://md.tech-ex.com/medical/2016/47834.html'
     te = BodyExtractor(url)
     te.execute()
     print(te.body)
