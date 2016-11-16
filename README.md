@@ -3,8 +3,6 @@
 
 将原代码库从Python2升级为Python3版本，修复少量bug。
 
-[![PyPI](https://img.shields.io/pypi/v/body-extractor-py3.svg)](https://pypi.python.org/pypi/body-extractor-py3)
-
 ### 使用：
 #### 先安装beautiful soup和html5lib
 
